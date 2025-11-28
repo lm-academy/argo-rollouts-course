@@ -1,0 +1,20 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: simple-color-app
+spec:
+  replicas: 5
+  selector:
+    matchLabels:
+      app: simple-color-app
+  template:
+    metadata:
+      labels:
+        app: simple-color-app
+    spec:
+      containers:
+        - name: app
+          image: lmacademy/simple-color-app:1.0.0
+          env:
+            - name: APP_COLOR
+              value: 'red'
