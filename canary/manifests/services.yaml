@@ -2,6 +2,33 @@ apiVersion: v1
 kind: Service
 metadata:
   name: rollout-canary-public
+  namespace: canary-lab
+spec:
+  type: NodePort
+  ports:
+    - port: 3000
+      name: http
+  selector:
+    app: rollout-canary
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: rollout-canary-stable
+  namespace: canary-lab
+spec:
+  type: NodePort
+  ports:
+    - port: 3000
+      name: http
+  selector:
+    app: rollout-canary
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: rollout-canary-preview
+  namespace: canary-lab
 spec:
   type: NodePort
   ports:
