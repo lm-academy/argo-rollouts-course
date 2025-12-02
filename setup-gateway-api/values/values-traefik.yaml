@@ -1,0 +1,45 @@
+# Configure Network Ports and EntryPoints
+ports:
+  web:
+    port: 80
+    nodePort: 30000
+    # No redirection to HTTPS
+
+# Enable Dashboard
+api:
+  dashboard: true
+  insecure: true # Exposes dashboard on port 8080 (container port)
+
+# Expose Dashboard via Traefik itself on HTTP
+ingressRoute:
+  dashboard:
+    enabled: true
+    matchRule: Host(`dashboard.localhost`)
+    entryPoints:
+      - web
+
+ingressClass:
+  enabled: false
+
+providers:
+  kubernetesIngress:
+    enabled: false
+  kubernetesGateway:
+    enabled: true
+
+# Gateway Listeners
+gateway:
+  listeners:
+    web:
+      port: 80
+      protocol: HTTP
+      namespacePolicy:
+        from: All
+
+logs:
+  access:
+    enabled: true
+
+metrics:
+  prometheus:
+    enabled: true
