@@ -1,0 +1,20 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Rollout
+metadata:
+  name: rollout-canary
+spec:
+  replicas: 10
+  selector:
+    matchLabels:
+      app: rollout-canary
+  template:
+    metadata:
+      labels:
+        app: rollout-canary
+    spec:
+      containers:
+        - name: rollout-canary
+          image: lmacademy/simple-color-app:1.0.0
+          env:
+            - name: APP_COLOR
+              value: orange
