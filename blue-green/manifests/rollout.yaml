@@ -1,0 +1,26 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Rollout
+metadata:
+  name: rollout-bluegreen
+  namespace: bluegreen-lab
+spec:
+  replicas: 5
+  selector:
+    matchLabels:
+      app: rollout-bluegreen
+  template:
+    metadata:
+      labels:
+        app: rollout-bluegreen
+    spec:
+      containers:
+        - name: app
+          image: lmacademy/simple-color-app:1.0.0
+          env:
+            - name: APP_COLOR
+              value: 'green'
+  strategy:
+    blueGreen:
+      activeService: rollout-bluegreen-active
+      previewService: rollout-bluegreen-preview
+      autoPromotionEnabled: false
