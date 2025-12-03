@@ -1,0 +1,43 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Rollout
+metadata:
+  name: rollout-gateway
+  namespace: gateway-lab
+spec:
+  replicas: 5
+  selector:
+    matchLabels:
+      app: rollout-gateway
+  template:
+    metadata:
+      labels:
+        app: rollout-gateway
+    spec:
+      containers:
+        - name: rollout-gateway
+          image: lmacademy/simple-color-app:1.0.0
+          env:
+            - name: APP_COLOR
+              value: green
+  strategy:
+    canary:
+      canaryService: rollout-gateway-canary
+      stableService: rollout-gateway-stable
+      dynamicStableScale: true
+      trafficRouting:
+        plugins:
+          argoproj-labs/gatewayAPI:
+            httpRoute: rollout-gateway-route # our created httproute
+            namespace: gateway-lab # namespace where this rollout resides
+      steps:
+        - setWeight: 30
+        - pause: {}
+        - setWeight: 40
+        - pause:
+            duration: 10s
+        - setWeight: 60
+        - pause:
+            duration: 10s
+        - setWeight: 80
+        - pause:
+            duration: 10s
