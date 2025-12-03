@@ -18,7 +18,7 @@ spec:
           image: lmacademy/simple-color-app:1.0.0
           env:
             - name: APP_COLOR
-              value: green
+              value: purple
   strategy:
     canary:
       canaryService: rollout-gateway-canary
@@ -29,7 +29,21 @@ spec:
           argoproj-labs/gatewayAPI:
             httpRoute: rollout-gateway-route # our created httproute
             namespace: gateway-lab # namespace where this rollout resides
+        managedRoutes:
+          - name: qa-override
       steps:
+        - setWeight: 1
+        - pause:
+            duration: 20s
+        - setCanaryScale:
+            weight: 40
+        - setHeaderRoute:
+            name: qa-override
+            match:
+              - headerName: x-canary
+                headerValue:
+                  exact: 'true'
+        - pause: {}
         - setWeight: 30
         - pause: {}
         - setWeight: 40
