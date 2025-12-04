@@ -1,0 +1,6 @@
+server:
+  global:
+    scrape_interval: 15s
+  service:
+    type: NodePort
+    nodePort: 30090
