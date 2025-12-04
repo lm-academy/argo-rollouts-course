@@ -1,0 +1,39 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Rollout
+metadata:
+  name: analysis-blue-green
+  namespace: analysis-lab
+spec:
+  replicas: 5
+  selector:
+    matchLabels:
+      app: analysis-blue-green
+  template:
+    metadata:
+      labels:
+        app: analysis-blue-green
+      annotations:
+        prometheus.io/scrape: 'true'
+        prometheus.io/port: '3000'
+        prometheus.io/path: '/metrics'
+    spec:
+      containers:
+        - name: analysis-blue-green
+          image: lmacademy/simple-color-app:1.1.0
+          env:
+            - name: ERROR_RATE
+              value: '0.03'
+            - name: APP_COLOR
+              value: pink
+  strategy:
+    blueGreen:
+      activeService: blue-green-active
+      previewService: blue-green-preview
+      prePromotionAnalysis:
+        templates:
+          - templateName: success-rate
+        args:
+          - name: service-name
+            value: blue-green-preview
+          - name: initial-delay
+            value: 2m
