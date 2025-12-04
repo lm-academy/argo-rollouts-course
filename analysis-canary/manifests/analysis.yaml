@@ -1,0 +1,21 @@
+apiVersion: argoproj.io/v1alpha1
+kind: AnalysisTemplate
+metadata:
+  name: success-rate
+  namespace: analysis-lab
+spec:
+  args:
+    - name: service-name
+  metrics:
+    - name: success-rate
+      interval: 5s
+      count: 60
+      successCondition: result[0] >= 0.95
+      failureLimit: 3
+      provider:
+        prometheus:
+          address: http://prometheus-server.monitoring.svc.cluster.local:80
+          query: |
+            sum(rate(http_request_duration_seconds_count{code!~"[45].*", service="{{args.service-name}}"}[1m]))
+            /
+            sum(rate(http_request_duration_seconds_count{service="{{args.service-name}}"}[1m]))

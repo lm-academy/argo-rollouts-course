@@ -3,10 +3,13 @@ kind: Service
 metadata:
   name: analysis-canary
   namespace: analysis-lab
+  annotations:
+    prometheus.io/scrape: 'true'
+    prometheus.io/port: '3000'
+    prometheus.io/path: '/metrics'
 spec:
   ports:
-    - port: 80
-      targetPort: 3000
+    - port: 3000
       name: http
   selector:
     app: analysis-canary
@@ -16,10 +19,13 @@ kind: Service
 metadata:
   name: analysis-canary-stable
   namespace: analysis-lab
+  annotations:
+    prometheus.io/scrape: 'true'
+    prometheus.io/port: '3000'
+    prometheus.io/path: '/metrics'
 spec:
   ports:
-    - port: 80
-      targetPort: 3000
+    - port: 3000
       name: http
   selector:
     app: analysis-canary
@@ -29,10 +35,13 @@ kind: Service
 metadata:
   name: analysis-canary-canary
   namespace: analysis-lab
+  annotations:
+    prometheus.io/scrape: 'true'
+    prometheus.io/port: '3000'
+    prometheus.io/path: '/metrics'
 spec:
   ports:
-    - port: 80
-      targetPort: 3000
+    - port: 3000
       name: http
   selector:
     app: analysis-canary

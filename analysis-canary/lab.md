@@ -21,7 +21,7 @@ In this lab, you will combine many concepts we've learned so far.
     1.  Observe how metrics soon start showing up in the Prometheus dashboard.
 3.  **Define Analysis:** Create an `analysis.yaml` file defining an `AnalysisTemplate` named `success-rate` in the `analysis-lab` namespace. It should query Prometheus to calculate the success rate (non-500 requests / total requests). You can use the following query for that:
     ```
-    sum(rate(http_request_duration_seconds_count{code!~"5.*", service="{{args.service-name}}"}[1m]))
+    sum(rate(http_request_duration_seconds_count{code!~"[45].*", service="{{args.service-name}}"}[1m]))
     /
     sum(rate(http_request_duration_seconds_count{service="{{args.service-name}}"}[1m]))
     ```

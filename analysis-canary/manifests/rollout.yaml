@@ -12,13 +12,17 @@ spec:
     metadata:
       labels:
         app: analysis-canary
+      annotations:
+        prometheus.io/scrape: 'true'
+        prometheus.io/port: '3000'
+        prometheus.io/path: '/metrics'
     spec:
       containers:
         - name: analysis-canary
           image: lmacademy/simple-color-app:1.1.0
           env:
             - name: ERROR_RATE
-              value: '0'
+              value: '0.1'
             - name: APP_COLOR
               value: red
   strategy:
@@ -28,7 +32,13 @@ spec:
       steps:
         - setWeight: 20
         - pause:
-            duration: 10s
+            duration: 3m
+        - analysis:
+            templates:
+              - templateName: success-rate
+            args:
+              - name: service-name
+                value: analysis-canary
         - setWeight: 40
         - pause:
             duration: 10s
