@@ -1,0 +1,38 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: analysis-canary
+  namespace: analysis-lab
+spec:
+  ports:
+    - port: 80
+      targetPort: 3000
+      name: http
+  selector:
+    app: analysis-canary
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: analysis-canary-stable
+  namespace: analysis-lab
+spec:
+  ports:
+    - port: 80
+      targetPort: 3000
+      name: http
+  selector:
+    app: analysis-canary
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: analysis-canary-canary
+  namespace: analysis-lab
+spec:
+  ports:
+    - port: 80
+      targetPort: 3000
+      name: http
+  selector:
+    app: analysis-canary

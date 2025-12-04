@@ -1,0 +1,37 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Rollout
+metadata:
+  name: analysis-canary
+  namespace: analysis-lab
+spec:
+  replicas: 5
+  selector:
+    matchLabels:
+      app: analysis-canary
+  template:
+    metadata:
+      labels:
+        app: analysis-canary
+    spec:
+      containers:
+        - name: analysis-canary
+          image: lmacademy/simple-color-app:1.1.0
+          env:
+            - name: ERROR_RATE
+              value: '0'
+            - name: APP_COLOR
+              value: red
+  strategy:
+    canary:
+      canaryService: analysis-canary-canary
+      stableService: analysis-canary-stable
+      steps:
+        - setWeight: 20
+        - pause:
+            duration: 10s
+        - setWeight: 40
+        - pause:
+            duration: 10s
+        - setWeight: 80
+        - pause:
+            duration: 10s
