@@ -60,4 +60,35 @@ This repository covers the following topics:
 - **analysis-blue-green**: Implementing Analysis Runs for Blue-Green deployments to automate promotion based on metrics.
 - **analysis-canary**: Implementing Analysis Runs for Canary deployments to automate promotion based on metrics.
 
+## 🛠️ Helper Scripts
+
+This repository includes helper scripts to simulate traffic and test your rollouts.
+
+### `test-requests.sh` (Linux/macOS)
+
+Located in various folders (for example, `analysis-blue-green/test-requests.sh`), this Bash script sends requests to your application.
+
+**Usage:**
+
+```bash
+./test-requests.sh [URL] [COUNT] [SLEEP]
+./test-requests.sh --tester  # Sends x-canary: true header
+```
+
+### `test-requests.ps1` (Windows)
+
+Located in the root folder, this PowerShell script provides equivalent functionality for Windows users.
+
+**Usage:**
+
+```powershell
+.\test-requests.ps1 -Url "http://localhost" -Count 100
+.\test-requests.ps1 -Tester  # Sends x-canary: true header
+```
+
+**Note on Differences:**
+
+- The Bash script uses double-dash flags (such as `--tester`) and positional arguments.
+- The PowerShell script uses standard PowerShell parameters (such as `-Tester`, `-Url`).
+
 I'm looking forward to seeing you in the course!
